@@ -2,8 +2,9 @@ package com.example.githubprofile.presenter;
 
 import android.util.Log;
 
-import com.example.githubapiwithretrofit.model.GithubProfile;
-import com.example.githubapiwithretrofit.util.RetrofitConnection;
+import com.example.githubprofile.model.GithubProfile;
+import com.example.githubprofile.util.RetrofitConnection;
+import com.example.githubprofile.model.GithubProfile;
 
 import retrofit2.Call;
 import retrofit2.Callback;
