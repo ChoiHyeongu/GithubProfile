@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">GithubProfile</string>
+    <string name="profile">Profile</string>
+    <string name="max_contribution">Max contribution : 16</string>
+    <string name="today_contribution">Today contribution : 2</string>
+    <string name="public_repo">Repository : 24</string>
+    <string name="followers">Followers : 5</string>
+    <string name="following">Following: 16</string>
+    <string name="contributions_in_the_last_year">519 contributions in the last year</string>
 </resources>
