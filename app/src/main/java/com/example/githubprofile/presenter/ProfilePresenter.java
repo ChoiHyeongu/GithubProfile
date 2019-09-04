@@ -2,9 +2,9 @@ package com.example.githubprofile.presenter;
 
 import android.util.Log;
 
-import com.example.githubprofile.model.GithubProfile;
 import com.example.githubprofile.util.RetrofitConnection;
-import com.example.githubprofile.model.GithubProfile;
+
+import org.json.JSONObject;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -30,20 +30,20 @@ public class ProfilePresenter implements Presenter.Present{
     public void loadUser() {
 
         RetrofitConnection retrofitConnection = RetrofitConnection.getInstance();
-        Call<GithubProfile> call =  retrofitConnection.getServer().getUser();
+        Call<JSONObject> call =  retrofitConnection.getServer().getUser();
 
-        call.enqueue(new Callback<GithubProfile>() {
+        call.enqueue(new Callback<JSONObject>() {
             @Override
-            public void onResponse(Call<GithubProfile> call, Response<GithubProfile> response) {
+            public void onResponse(Call<JSONObject> call, Response<JSONObject> response) {
                 if(response.isSuccessful()){
-                    Log.d(TAG, "onSuccessful");
+                    Log.d(TAG, "onSuccessful : " + response.body().toString());
                 } else {
                     Log.d(TAG, "onFailure");
                 }
             }
 
             @Override
-            public void onFailure(Call<GithubProfile> call, Throwable t) {
+            public void onFailure(Call<JSONObject> call, Throwable t) {
                 Log.d(TAG, "onFailure : " + t.toString());
             }
         });

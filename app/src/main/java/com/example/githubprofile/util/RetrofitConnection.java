@@ -14,7 +14,7 @@ public class RetrofitConnection {
     private RetrofitConnection() {
     }
 
-    String githubURL= "https://api.github.com/users";
+    String githubURL= "https://api.github.com/users/";
 
     Retrofit retrofit = new Retrofit.Builder()
             .baseUrl(githubURL)
