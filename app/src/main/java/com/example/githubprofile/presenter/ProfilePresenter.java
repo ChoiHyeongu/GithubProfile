@@ -3,6 +3,7 @@ package com.example.githubprofile.presenter;
 import android.util.Log;
 
 import com.example.githubprofile.model.GithubProfile;
+import com.example.githubprofile.util.GithubProfileCallback;
 import com.example.githubprofile.util.RetrofitConnection;
 import com.google.gson.JsonObject;
 
@@ -17,7 +18,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ProfilePresenter implements Presenter.Present{
+public class ProfilePresenter implements Presenter.Present {
 
     final String TAG = "ProfilePresenter";
     String userJson;
@@ -39,7 +40,7 @@ public class ProfilePresenter implements Presenter.Present{
     }
 
     @Override
-    public void getUserInfo() {
+    public void getUserInfo(final GithubProfileCallback callback) {
 
         RetrofitConnection retrofitConnection = RetrofitConnection.getInstance();
         Call<JsonObject> call =  retrofitConnection.getServer().getUser();
@@ -50,6 +51,9 @@ public class ProfilePresenter implements Presenter.Present{
                 if(response.isSuccessful()){
                     userJson = response.body().toString();
                     Log.d(TAG, "onSuccessful : " + userJson);
+                    GithubProfile githubProfile = makeProfileInstance(userJson);
+                    callback.onSuccess(githubProfile);
+
                 } else {
                     Log.d(TAG, "onFailure");
                 }
@@ -58,24 +62,24 @@ public class ProfilePresenter implements Presenter.Present{
             @Override
             public void onFailure(Call<JsonObject> call, Throwable t) {
                 Log.d(TAG, "onFailure : " + t.toString());
+                callback.onError();
             }
         });
     }
 
-    @Override
-    public GithubProfile makeProfileInstance(){
+    public GithubProfile makeProfileInstance(String userJson){
 
-        int followers=0;
-        int following=0;
-        int repo=0;
+        String followers="";
+        String following="";
+        String repo="";
         String username="";
         String bio="";
 
         try {
             JSONObject jsonObject = new JSONObject(userJson);
-            followers = jsonObject.getInt("followers");
-            following = jsonObject.getInt("following");
-            repo = jsonObject.getInt("public_repos");
+            followers = jsonObject.getString("followers");
+            following = jsonObject.getString("following");
+            repo = jsonObject.getString("public_repos");
             username = jsonObject.getString("name");
             bio = jsonObject.getString("bio");
         } catch (JSONException e) {
@@ -84,7 +88,7 @@ public class ProfilePresenter implements Presenter.Present{
 
 
         GithubProfile githubProfile = new GithubProfile
-                .Builder(username, followers, following, repo, 0, 0)
+                .Builder(username, followers, following, repo, "0", "0")
                 .bio(bio)
                 .build();
 

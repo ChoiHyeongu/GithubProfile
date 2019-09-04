@@ -3,38 +3,38 @@ package com.example.githubprofile.model;
 public class GithubProfile {
 
     private final String username;
-    private final int followers;
-    private final int following;
+    private final String followers;
     private final String bio;
-    private final int repo;
-    private final int maxContribution;
-    private final int todayContribution;
+    private final String following;
+    private final String repo;
+    private final String maxContribution;
+    private final String todayContribution;
 
     public String getUsername() {
         return username;
     }
 
-    public int getFollowers() {
+    public String getFollowers() {
         return followers;
-    }
-
-    public int getFollowing() {
-        return following;
     }
 
     public String getBio() {
         return bio;
     }
 
-    public int getRepo() {
+    public String getFollowing() {
+        return following;
+    }
+
+    public String getRepo() {
         return repo;
     }
 
-    public int getMaxContribution() {
+    public String getMaxContribution() {
         return maxContribution;
     }
 
-    public int getTodayContribution() {
+    public String getTodayContribution() {
         return todayContribution;
     }
 
@@ -42,16 +42,16 @@ public class GithubProfile {
 
         // Required parameters
         private String username;
-        private int followers;
-        private int following;
-        private int repo;
-        private int maxContribution;
-        private int todayContribution;
+        private String followers;
+        private String following;
+        private String repo;
+        private String maxContribution;
+        private String todayContribution;
 
         // Optional parameters
         private String bio = "";
 
-        public Builder(String username, int followers, int following, int repo, int maxContribution, int todayContribution) {
+        public Builder(String username, String followers, String following, String repo, String maxContribution, String todayContribution) {
             this.username = username;
             this.followers = followers;
             this.following = following;

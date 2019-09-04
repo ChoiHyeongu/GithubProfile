@@ -11,16 +11,18 @@ import com.example.githubprofile.R;
 import com.example.githubprofile.model.GithubProfile;
 import com.example.githubprofile.presenter.Presenter;
 import com.example.githubprofile.presenter.ProfilePresenter;
+import com.example.githubprofile.util.GithubProfileCallback;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
 
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
 
-public class MainActivity extends AppCompatActivity implements Presenter.View {
+public class MainActivity extends AppCompatActivity implements Presenter.View, GithubProfileCallback {
 
     private static final String TAG = "MainActivity";
     ProfilePresenter profilePresenter;
+    GithubProfile githubProfile;
 
     TextView username;
     TextView maxContribution;
@@ -41,10 +43,7 @@ public class MainActivity extends AppCompatActivity implements Presenter.View {
 
         profilePresenter = new ProfilePresenter(this);
         profilePresenter.attachView(this);
-        profilePresenter.getUserInfo();
-        GithubProfile githubProfile = profilePresenter.makeProfileInstance();
-        //Log.d(TAG, githubProfile.getUsername());
-        //setProfile(githubProfile);
+        profilePresenter.getUserInfo(this);
     }
 
     @Override
@@ -86,12 +85,28 @@ public class MainActivity extends AppCompatActivity implements Presenter.View {
 
     @Override
     public void setProfile(GithubProfile githubProfile) {
+
+        Log.d(TAG, "MAX : " + githubProfile.getMaxContribution()
+                + "TODAY : " + githubProfile.getTodayContribution()
+                + "REPOS : " + githubProfile.getRepo()
+                + "FOLLOWING, FOLLOWERS : " + githubProfile.getFollowing() + ", " + githubProfile.getFollowers());
+
         username.setText(githubProfile.getUsername());
         maxContribution.setText(githubProfile.getMaxContribution());
         maxContribution.setText(githubProfile.getTodayContribution());
         repoCount.setText(githubProfile.getRepo());
-        followers.setText(githubProfile.getFollowers());
+        followers.setText(githubProfile.getRepo());
         following.setText(githubProfile.getFollowing());
         bio.setText(githubProfile.getBio());
+    }
+
+    @Override
+    public void onSuccess(GithubProfile githubProfile) {
+        setProfile(githubProfile);
+    }
+
+    @Override
+    public void onError() {
+        Log.d(TAG, "Fail to receive profile");
     }
 }

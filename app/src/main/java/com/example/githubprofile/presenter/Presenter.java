@@ -1,6 +1,7 @@
 package com.example.githubprofile.presenter;
 
 import com.example.githubprofile.model.GithubProfile;
+import com.example.githubprofile.util.GithubProfileCallback;
 
 import java.util.concurrent.BlockingQueue;
 
@@ -13,7 +14,6 @@ public interface Presenter {
     interface Present{
         void attachView(View view);
         void detachView();
-      GithubProfile makeProfileInstance();
-      void getUserInfo();
+        void getUserInfo(final GithubProfileCallback callback);
     }
 }
