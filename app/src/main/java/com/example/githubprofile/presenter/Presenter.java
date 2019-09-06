@@ -3,8 +3,6 @@ package com.example.githubprofile.presenter;
 import com.example.githubprofile.model.GithubProfile;
 import com.example.githubprofile.util.GithubProfileCallback;
 
-import java.util.concurrent.BlockingQueue;
-
 public interface Presenter {
 
     interface View{
