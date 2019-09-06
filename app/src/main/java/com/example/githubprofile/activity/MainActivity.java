@@ -3,7 +3,15 @@ package com.example.githubprofile.activity;
 import android.Manifest;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.os.Handler;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -128,11 +136,14 @@ public class MainActivity extends AppCompatActivity implements Presenter.View, G
 
                     InputStream in = url.openStream();
                     final Bitmap bitmap = BitmapFactory.decodeStream(in);
+                    final RoundedBitmapDrawable roundedBitmapDrawable = RoundedBitmapDrawableFactory.create(getResources(), bitmap);
+                    roundedBitmapDrawable.setCornerRadius(3f);
+                    roundedBitmapDrawable.setAntiAlias(true);
+
                     handler.post(new Runnable() {
                         @Override
                         public void run() {
-                            profileImage.setImageBitmap(bitmap);
-                            Log.d(TAG, bitmap.toString());
+                            profileImage.setImageDrawable(roundedBitmapDrawable);
                         }
                     });
                 } catch (Exception e){
