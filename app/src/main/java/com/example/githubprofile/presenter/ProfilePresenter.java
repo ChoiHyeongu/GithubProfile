@@ -78,8 +78,7 @@ public class ProfilePresenter implements Presenter.Present {
             repo = jsonObject.getString("public_repos");
             username = jsonObject.getString("name");
             image = jsonObject.getString("avatar_url");
-            bio = jsonObject.getString("bio");
-            bio = bio.replace("\n", " ");
+            bio = processBio(jsonObject.getString("bio"));
 
             Log.d(TAG, "MAX : " + "0"
                     + "\nTODAY : " + "0"
@@ -97,5 +96,13 @@ public class ProfilePresenter implements Presenter.Present {
                 .build();
 
         return githubProfile;
+    }
+
+    String processBio(String bio){
+
+        bio = bio.replace("\n", " ");
+        bio = bio.trim().replaceAll(" +", "");
+
+        return bio;
     }
 }
