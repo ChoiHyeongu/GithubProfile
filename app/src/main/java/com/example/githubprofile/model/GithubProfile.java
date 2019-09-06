@@ -9,6 +9,7 @@ public class GithubProfile {
     private final String repo;
     private final String maxContribution;
     private final String todayContribution;
+    private final String image;
 
     public String getUsername() {
         return username;
@@ -38,6 +39,10 @@ public class GithubProfile {
         return todayContribution;
     }
 
+    public String getImage() {
+        return image;
+    }
+
     public static class Builder{
 
         // Required parameters
@@ -50,6 +55,7 @@ public class GithubProfile {
 
         // Optional parameters
         private String bio = "";
+        private String image = "";
 
         public Builder(String username, String followers, String following, String repo, String maxContribution, String todayContribution) {
             this.username = username;
@@ -65,6 +71,11 @@ public class GithubProfile {
             return this;
         }
 
+        public Builder image(String val){
+            image = val;
+            return this;
+        }
+
         public GithubProfile build() {
             return new GithubProfile(this);
         }
@@ -76,6 +87,7 @@ public class GithubProfile {
         following = builder.following;
         bio = builder.bio;
         repo = builder.repo;
+        image = builder.image;
         maxContribution = builder.maxContribution;
         todayContribution = builder.todayContribution;
     }

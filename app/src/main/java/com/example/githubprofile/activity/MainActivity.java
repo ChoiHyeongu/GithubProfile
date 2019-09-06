@@ -1,9 +1,13 @@
 package com.example.githubprofile.activity;
 
 import android.Manifest;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -15,15 +19,18 @@ import com.example.githubprofile.util.GithubProfileCallback;
 import com.gun0912.tedpermission.PermissionListener;
 import com.gun0912.tedpermission.TedPermission;
 
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.List;
-import java.util.concurrent.BlockingQueue;
 
 public class MainActivity extends AppCompatActivity implements Presenter.View, GithubProfileCallback {
 
     private static final String TAG = "MainActivity";
-    ProfilePresenter profilePresenter;
-    GithubProfile githubProfile;
 
+    ProfilePresenter profilePresenter;
+
+    ImageView profileImage;
     TextView username;
     TextView maxContribution;
     TextView todayContribution;
@@ -31,6 +38,9 @@ public class MainActivity extends AppCompatActivity implements Presenter.View, G
     TextView followers;
     TextView following;
     TextView bio;
+
+    Handler handler = new Handler();
+    Bitmap bitmap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +63,7 @@ public class MainActivity extends AppCompatActivity implements Presenter.View, G
     }
 
     private void initView(){
+        profileImage = findViewById(R.id.main_img_profile);
         username = findViewById(R.id.main_text_username);
         maxContribution = findViewById(R.id.main_text_max_contribution);
         todayContribution = findViewById(R.id.main_text_today_contribution);
@@ -87,17 +98,58 @@ public class MainActivity extends AppCompatActivity implements Presenter.View, G
     public void setProfile(GithubProfile githubProfile) {
 
         Log.d(TAG, "MAX : " + githubProfile.getMaxContribution()
-                + "TODAY : " + githubProfile.getTodayContribution()
-                + "REPOS : " + githubProfile.getRepo()
-                + "FOLLOWING, FOLLOWERS : " + githubProfile.getFollowing() + ", " + githubProfile.getFollowers());
+                + "\nTODAY : " + githubProfile.getTodayContribution()
+                + "\nREPOS : " + githubProfile.getRepo()
+                + "\nFOLLOWING, FOLLOWERS : " + githubProfile.getFollowing() + ", " + githubProfile.getFollowers()
+                + "\nProflie Image : " + githubProfile.getImage());
 
+        setProfileImage(githubProfile.getImage());
         username.setText(githubProfile.getUsername());
         maxContribution.setText(githubProfile.getMaxContribution());
-        maxContribution.setText(githubProfile.getTodayContribution());
+        todayContribution.setText(githubProfile.getTodayContribution());
         repoCount.setText(githubProfile.getRepo());
-        followers.setText(githubProfile.getRepo());
+        followers.setText(githubProfile.getFollowers());
         following.setText(githubProfile.getFollowing());
         bio.setText(githubProfile.getBio());
+    }
+
+    private void setProfileImage(final String imageURL){
+
+        Log.d(TAG, "setProfileImage");
+        Thread t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Log.d(TAG, "setProfileImage");
+                    URL url = new URL(imageURL);
+                    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                    connection.setDoInput(true);
+                    connection.connect();
+
+                    InputStream in = url.openStream();
+                    final Bitmap bitmap = BitmapFactory.decodeStream(in);
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            profileImage.setImageBitmap(bitmap);
+                            Log.d(TAG, bitmap.toString());
+                        }
+                    });
+                } catch (Exception e){
+                    Log.d(TAG, "setProfileImage : Error");
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        t.start();
+
+        try{
+            t.join();
+            profileImage.setImageBitmap(bitmap);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

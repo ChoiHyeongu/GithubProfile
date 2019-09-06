@@ -7,12 +7,8 @@ import com.example.githubprofile.util.GithubProfileCallback;
 import com.example.githubprofile.util.RetrofitConnection;
 import com.google.gson.JsonObject;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -53,7 +49,6 @@ public class ProfilePresenter implements Presenter.Present {
                     Log.d(TAG, "onSuccessful : " + userJson);
                     GithubProfile githubProfile = makeProfileInstance(userJson);
                     callback.onSuccess(githubProfile);
-
                 } else {
                     Log.d(TAG, "onFailure");
                 }
@@ -74,6 +69,7 @@ public class ProfilePresenter implements Presenter.Present {
         String repo="";
         String username="";
         String bio="";
+        String image="";
 
         try {
             JSONObject jsonObject = new JSONObject(userJson);
@@ -81,15 +77,23 @@ public class ProfilePresenter implements Presenter.Present {
             following = jsonObject.getString("following");
             repo = jsonObject.getString("public_repos");
             username = jsonObject.getString("name");
+            image = jsonObject.getString("avatar_url");
             bio = jsonObject.getString("bio");
+            bio = bio.replace("\n", " ");
+
+            Log.d(TAG, "MAX : " + "0"
+                    + "\nTODAY : " + "0"
+                    + "\nREPOS : " + repo
+                    + "\nFOLLOWING, FOLLOWERS : " + followers
+                    + "\nProflie Image : " + image);
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-
         GithubProfile githubProfile = new GithubProfile
                 .Builder(username, followers, following, repo, "0", "0")
                 .bio(bio)
+                .image(image)
                 .build();
 
         return githubProfile;
