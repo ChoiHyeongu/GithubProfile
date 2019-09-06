@@ -101,7 +101,7 @@ public class ProfilePresenter implements Presenter.Present {
     String processBio(String bio){
 
         bio = bio.replace("\n", " ");
-        bio = bio.trim().replaceAll(" +", "");
+        bio = bio.trim().replaceAll(" +", " ");
 
         return bio;
     }
